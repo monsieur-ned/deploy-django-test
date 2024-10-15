@@ -2,21 +2,45 @@ version: '3'
 
 services:
   backend:
-    volumes:
-      - static:/static
-    env_file:
-      - .env
     build: 
       context: .
+    env_file:
+      - .env  # Contient les variables d'environnement pour Django et la base de données
+    volumes:
+      - static:/static
     ports:
-      - "8000:8000"  # Ajout de guillemets autour des ports
+      - "8000:8000"
+    depends_on:
+      - db  # Attendre que le service MySQL démarre
+    environment:
+      - DB_HOST=db  # Adresse du service MySQL
+      - DB_PORT=3306  # Port MySQL
+      - DB_NAME=${MYSQL_DATABASE}  # Nom de la base de données
+      - DB_USER=${MYSQL_USER}  # Utilisateur MySQL
+      - DB_PASSWORD=${MYSQL_PASSWORD}  # Mot de passe MySQL
+
   nginx:
     build: ./nginx
     volumes:
       - static:/static
     ports:
-      - "80:80"  # Ajout de guillemets autour des ports
+      - "80:80"
     depends_on:
       - backend
+
+  db:
+    image: mysql:8.0  # Utiliser l'image officielle MySQL
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}  # Nom de la base de données
+      MYSQL_USER: ${MYSQL_USER}  # Utilisateur MySQL
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}  # Mot de passe MySQL
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}  # Mot de passe root
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql  # Stocker les données dans un volume persistant
+
 volumes:
   static:
+  db_data:
