@@ -3,19 +3,19 @@ version: '3'
 services:
   backend:
     volumes:
-      -static:/static
+      - static:/static
     env_file:
       - .env
     build: 
       context: .
     ports:
-      -8000:8000
+      - "8000:8000"  # Ajout de guillemets autour des ports
   nginx:
     build: ./nginx
     volumes:
-      -static:/static
+      - static:/static
     ports:
-      -80:80
+      - "80:80"  # Ajout de guillemets autour des ports
     depends_on:
       - backend
 volumes:
