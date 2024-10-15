@@ -41,6 +41,17 @@ services:
     volumes:
       - db_data:/var/lib/mysql  # Stocker les données dans un volume persistant
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"  # Accéder à phpMyAdmin via localhost:8080
+    environment:
+      PMA_HOST: db  # Se connecter au service MySQL (db)
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}  # Mot de passe root de MySQL
+    depends_on:
+      - db  # phpMyAdmin dépend de MySQL
+
 volumes:
   static:
   db_data:
