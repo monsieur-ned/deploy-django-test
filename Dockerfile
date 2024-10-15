@@ -1,6 +1,6 @@
 FROM python:3.9
 
-RUN pip install --upgrad pip 
+RUN pip install --upgrade pip
 
 COPY ./requeriments.txt .
 RUN pip install -r requeriments.txt
