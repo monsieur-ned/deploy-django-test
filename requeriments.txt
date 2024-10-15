@@ -2,3 +2,4 @@ Django
 mysqlclient
 pillow
 qrcode
+gunicorn
