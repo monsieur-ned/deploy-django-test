@@ -25,33 +25,18 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-if 'SERVER_SOFTWARE' in os.environ:
-    print('@@ PRODUCTION @@')
-    DEBUG = False
-    ENV = 'PROD'
+DEBUG = os.getenv('DEBUG')
 
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'HOST': 'mysql',
-            'PORT': 3306,
-            'NAME': 'site_db',
-            'USER': 'site_db',
-            'PASSWORD': 'P@ssw0rd',
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.getenv('MYSQL_DATABASE'),
+        'USER': os.getenv('MYSQL_USER'),
+        'PASSWORD': os.getenv('MYSQL_PASSWORD'),
+        'HOST': os.getenv('DB_HOST', 'db'),
+        'PORT': os.getenv('DB_PORT', '3306'),
     }
-
-else:
-    print('@@ DEVELOPMENT @@')
-    DEBUG = True
-    ENV = 'DEV'
-
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'site_db.sqlite3'),
-        }
-    }
+}
 
 ALLOWED_HOSTS = ["*"]
 
