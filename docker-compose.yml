@@ -5,32 +5,31 @@ services:
     build: 
       context: .
     env_file:
-      - .env  # Contient les variables d'environnement pour Django et la base de données
+      - .env
     volumes:
       - static:/static
       - medias:/medias
     ports:
       - "8000:8000"
     depends_on:
-      - db  # Attendre que le service MySQL démarre
+      - db
     environment:
-      - DB_HOST=db  # Adresse du service MySQL
-      - DB_PORT=3306  # Port MySQL
-      - DB_NAME=${MYSQL_DATABASE}  # Nom de la base de données
-      - DB_USER=${MYSQL_USER}  # Utilisateur MySQL
-      - DB_PASSWORD=${MYSQL_PASSWORD}  # Mot de passe MySQL
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=${MYSQL_DATABASE}
+      - DB_USER=${MYSQL_USER}
+      - DB_PASSWORD=${MYSQL_PASSWORD}
 
   nginx:
     build: ./nginx
     volumes:
-      - ./certbot/conf:/etc/letsencrypt  # Montre les certificats
-      - ./certbot/www:/var/www/certbot    # Chemin pour la vérification de Certbot
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
     ports:
       - "80:80"
       - "443:443"
     depends_on:
       - backend
-      - certbot
 
   certbot:
     image: certbot/certbot
@@ -43,14 +42,14 @@ services:
     image: mysql:8.0  
     restart: always
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}  # Nom de la base de données
-      MYSQL_USER: ${MYSQL_USER}  # Utilisateur MySQL
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}  # Mot de passe MySQL
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}  # Mot de passe root
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
-      - db_data:/var/lib/mysql  # Stocker les données dans un volume persistant
+      - db_data:/var/lib/mysql
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -67,4 +66,3 @@ volumes:
   static:
   medias:
   db_data:
-
