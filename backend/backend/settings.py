@@ -131,6 +131,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'medias')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CSRF_TRUSTED_ORIGINS = ['http://146.59.195.139', 'https://146.59.195.139']
+CSRF_TRUSTED_ORIGINS = [
+    'http://146.59.195.139', 
+    'https://146.59.195.139', 
+    'http://lifestylesante.org', 
+    'http://www.lifestylesante.org', 
+    'https://lifestylesante.org'
+    'https://www.lifestylesante.org'
+]
 
 
