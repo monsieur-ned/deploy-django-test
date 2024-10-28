@@ -8,6 +8,7 @@ services:
       - .env  # Contient les variables d'environnement pour Django et la base de données
     volumes:
       - static:/static
+      - medias:/medias
     ports:
       - "8000:8000"
     depends_on:
@@ -23,13 +24,15 @@ services:
     build: ./nginx
     volumes:
       - static:/static
+      - medias:/medias
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - backend
 
   db:
-    image: mysql:8.0  # Utiliser l'image officielle MySQL
+    image: mysql:8.0  
     restart: always
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}  # Nom de la base de données
@@ -45,13 +48,14 @@ services:
     image: phpmyadmin/phpmyadmin
     restart: always
     ports:
-      - "8080:80"  # Accéder à phpMyAdmin via localhost:8080
+      - "8080:80"
     environment:
-      PMA_HOST: db  # Se connecter au service MySQL (db)
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}  # Mot de passe root de MySQL
+      PMA_HOST: db 
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     depends_on:
-      - db  # phpMyAdmin dépend de MySQL
+      - db  
 
 volumes:
   static:
   db_data:
+
