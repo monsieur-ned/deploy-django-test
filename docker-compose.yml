@@ -23,14 +23,22 @@ services:
   nginx:
     build: ./nginx
     volumes:
-      - static:/static
-      - medias:/medias
+      - ./certbot/conf:/etc/letsencrypt  # Montre les certificats
+      - ./certbot/www:/var/www/certbot    # Chemin pour la vérification de Certbot
     ports:
       - "80:80"
       - "443:443"
     depends_on:
       - backend
+      - certbot
 
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot --quiet; sleep 12h & wait $${!}; done;'"
+    
   db:
     image: mysql:8.0  
     restart: always
